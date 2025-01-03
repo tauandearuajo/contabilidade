@@ -521,14 +521,14 @@ $total_cursos = mysqli_num_rows($resultado_blog);
                                                 <td class="text-dark"><?= $dados_agent['created_at'] ?></td>
                                                 <td>
                                                     <div class="d-flex justify-content-evenly gap-1">
-                                                       <!-- <a class="btn btn-primary btn-icon btn-sm rounded-pill" data-bs-toggle="modal" data-bs-target="#editarImagem<?= $dados_agent['id'] ?>" role="button">
+                                                       <a class="btn btn-primary btn-icon btn-sm rounded-pill" data-bs-toggle="modal" data-bs-target="#editarImagem<?= $dados_agent['id'] ?>" role="button">
                                                             <span class="btn-inner">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" width="32" fill="currentColor" class="bi bi-card-image" viewBox="0 0 16 16">
                                                                     <path d="M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0" />
                                                                     <path d="M1.5 2A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2zm13 1a.5.5 0 0 1 .5.5v6l-3.775-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12v.54L1 12.5v-9a.5.5 0 0 1 .5-.5z" />
                                                                 </svg>
                                                             </span>
-                                                        </a>--->
+                                                        </a>
                                                         <a class="btn btn-primary btn-icon btn-sm rounded-pill" data-bs-toggle="modal" data-bs-target="#editarAgente<?= $dados_agent['id'] ?>" role="button">
                                                             <span class="btn-inner">
                                                                 <svg class="icon-32" width="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

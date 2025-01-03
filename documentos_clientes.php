@@ -5,13 +5,13 @@ require_once 'model/database/conexao.php';
 
 session_start();
 if (!isset($_SESSION['logado'])) :
-    header('Location: https://Polos CRIdobrasil.com.br/app/admin/');
+    header('Location: https://lokicgp.com.br/');
 endif;
 
 $id = $_SESSION['id_usuario'];
 $sql = " SELECT*FROM users WHERE id = '$id'";
 $resultado = mysqli_query($connect, $sql);
-$dados = mysqli_fetch_array($resultado);
+$dadosUser = mysqli_fetch_array($resultado);
 
 
 //tipo_usuario = $dados['user_level'];
@@ -20,11 +20,31 @@ define('Endereco', 'https://admin.emperius.com.br');
 $sql_tipo = "SELECT user_level from users where id='$id'";
 $resultado_tipo = mysqli_query($connect, $sql_tipo);
 $dadoTipo = mysqli_fetch_array($resultado_tipo);
-$idcliente = $dados['id'];
+$idcliente = $dadosUser['id'];
 
 
+$pagina = (isset($_GET['pagina'])) ? $_GET['pagina'] : 1;
 
+//Selecionar todos os cursos da tabela
+$consulta_blog = "SELECT * FROM guides_and_documents";
+$dados = mysqli_query($connect, $consulta_blog);
 
+//Contar o total de cursos
+$total_cursos = mysqli_num_rows($dados);
+
+//Seta a quantidade de cursos por pagina
+$quantidade_pg = 6;
+
+//calcular o número de pagina necessárias para apresentar os cursos
+$num_pagina = ceil($total_cursos / $quantidade_pg);
+
+//Calcular o inicio da visualizacao
+$incio = ($quantidade_pg * $pagina) - $quantidade_pg;
+
+//Selecionar os cursos a serem apresentado na página
+$result_blog = "SELECT * FROM guides_and_documents ORDER BY name asc limit $incio, $quantidade_pg";
+$resultado_blog = mysqli_query($connect, $result_blog);
+$total_cursos = mysqli_num_rows($resultado_blog);
 
 ?>
 <!doctype html>
@@ -33,15 +53,15 @@ $idcliente = $dados['id'];
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Area do administrador - Social</title>
-    <meta name="description" content="Hope UI Pro is a revolutionary Bootstrap Admin Dashboard Template and UI Components Library. The Admin Dashboard Template and UI Component features 8 modules.">
-    <meta name="keywords" content="premium, admin, dashboard, template, bootstrap 5, clean ui, hope ui, admin dashboard,responsive dashboard, optimized dashboard, File Manager">
+    <title>Administração Social</title>
+    <meta name="description" content="">
+    <meta name="keywords" content="premium, admin, dashboard, template, bootstrap 5, clean ui, hope ui, admin dashboard,responsive dashboard, optimized dashboard, E-commerce app">
     <meta name="author" content="Iqonic Design">
-    <meta name="DC.title" content="Hope UI Pro File Manager | Responsive Bootstrap 5 Admin Dashboard Template">
+    <meta name="DC.title" content="Hope UI Pro E-commerce | Responsive Bootstrap 5 Admin Dashboard Template">
     <!-- Google Font Api KEY-->
     <meta name="google_font_api" content="AIzaSyBG58yNdAjc20_8jAvLNSVi9E4Xhwjau_k">
     <!-- Config Options -->
-    <meta name="setting_options" content='{&quot;saveLocal&quot;:&quot;sessionStorage&quot;,&quot;storeKey&quot;:&quot;huisetting&quot;,&quot;setting&quot;:{&quot;app_name&quot;:{&quot;value&quot;:&quot;Hope UI&quot;},&quot;theme_scheme_direction&quot;:{&quot;value&quot;:&quot;ltr&quot;},&quot;theme_scheme&quot;:{&quot;value&quot;:&quot;light&quot;},&quot;theme_style_appearance&quot;:{&quot;value&quot;:[&quot;theme-default&quot;]},&quot;theme_color&quot;:{&quot;colors&quot;:{&quot;--{{prefix}}primary&quot;:&quot;#3a57e8&quot;,&quot;--{{prefix}}info&quot;:&quot;#08B1BA&quot;},&quot;value&quot;:&quot;theme-color-default&quot;},&quot;theme_transition&quot;:{&quot;value&quot;:&quot;theme-with-animation&quot;},&quot;theme_font_size&quot;:{&quot;value&quot;:&quot;theme-fs-md&quot;},&quot;page_layout&quot;:{&quot;value&quot;:&quot;container-fluid&quot;},&quot;header_navbar&quot;:{&quot;value&quot;:&quot;default&quot;},&quot;header_banner&quot;:{&quot;value&quot;:&quot;default&quot;},&quot;sidebar_color&quot;:{&quot;value&quot;:&quot;sidebar-white&quot;},&quot;card_color&quot;:{&quot;value&quot;:&quot;card-default&quot;},&quot;sidebar_type&quot;:{&quot;value&quot;:[]},&quot;sidebar_menu_style&quot;:{&quot;value&quot;:&quot;left-bordered&quot;},&quot;footer&quot;:{&quot;value&quot;:&quot;default&quot;},&quot;body_font_family&quot;:{&quot;value&quot;:null},&quot;heading_font_family&quot;:{&quot;value&quot;:null}}}'>
+    <meta name="setting_options" content='{&quot;saveLocal&quot;:&quot;sessionStorage&quot;,&quot;storeKey&quot;:&quot;huisetting&quot;,&quot;setting&quot;:{&quot;app_name&quot;:{&quot;value&quot;:&quot;Hope UI&quot;},&quot;theme_scheme_direction&quot;:{&quot;value&quot;:&quot;ltr&quot;},&quot;theme_scheme&quot;:{&quot;value&quot;:&quot;light&quot;},&quot;theme_style_appearance&quot;:{&quot;value&quot;:[&quot;theme-default&quot;]},&quot;theme_color&quot;:{&quot;colors&quot;:{&quot;--{{prefix}}primary&quot;:&quot;#242237&quot;,&quot;--{{prefix}}info&quot;:&quot;#242237&quot;},&quot;value&quot;:&quot;theme-color-default&quot;},&quot;theme_transition&quot;:{&quot;value&quot;:&quot;theme-with-animation&quot;},&quot;theme_font_size&quot;:{&quot;value&quot;:&quot;theme-fs-md&quot;},&quot;page_layout&quot;:{&quot;value&quot;:&quot;container-fluid&quot;},&quot;header_navbar&quot;:{&quot;value&quot;:&quot;default&quot;},&quot;header_banner&quot;:{&quot;value&quot;:&quot;default&quot;},&quot;sidebar_color&quot;:{&quot;value&quot;:&quot;sidebar-white&quot;},&quot;card_color&quot;:{&quot;value&quot;:&quot;card-default&quot;},&quot;sidebar_type&quot;:{&quot;value&quot;:[]},&quot;sidebar_menu_style&quot;:{&quot;value&quot;:&quot;left-bordered&quot;},&quot;footer&quot;:{&quot;value&quot;:&quot;default&quot;},&quot;body_font_family&quot;:{&quot;value&quot;:null},&quot;heading_font_family&quot;:{&quot;value&quot;:null}}}'>
     <!-- Favicon -->
     <link rel="shortcut icon" href="assets/images/favicon.png" />
 
@@ -56,6 +76,8 @@ $idcliente = $dados['id'];
 
 
 
+    <!-- SwiperSlider css -->
+    <link rel="stylesheet" href="assets/vendor/swiperSlider/swiper-bundle.min.css">
 
 
 
@@ -80,7 +102,10 @@ $idcliente = $dados['id'];
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="file-manager/assets/css/file-manager.min.css" />
+    <link rel="stylesheet" href="e-commerce/assets/css/e-commerce.min.css" />
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.11/jquery.mask.min.js"></script>
 </head>
 
 <body class="">
@@ -99,7 +124,6 @@ $idcliente = $dados['id'];
                     </div>
                 </div>
                 <!--logo End-->
-
             </a>
             <div class="sidebar-toggle" data-toggle="sidebar" data-active="true">
                 <i class="icon">
@@ -115,12 +139,12 @@ $idcliente = $dados['id'];
                 <div class="sidebar-profile-body">
                     <div class="mb-3 d-flex justify-content-center">
                         <div class="rounded rounded-3  border-primary p-2">
-                            <img src="<?php echo $dados['photo_user'] ?>" alt="User-Profile" class="img-fluid rounded-circle" style="border: 4px solid #F5773D;" loading="lazy">
+                            <img src="<?php echo $dadosUser['photo_user'] ?>" alt="User-Profile" class="img-fluid rounded-circle" style="border: 4px solid #F5773D;" loading="lazy">
                         </div>
                     </div>
                     <div class="sidebar-profile-detail">
-                        <h6 class="sidebar-profile-name"><?php echo $dados['name'] ?></h6>
-                        <span class="sidebar-profile-username"><?php echo $dados['status'] ?></span>
+                        <h6 class="sidebar-profile-name"><?php echo $dadosUser['name'] ?></h6>
+                        <span class="sidebar-profile-username"><?php echo $dadosUser['status'] ?></span>
                     </div>
                 </div>
             </div>
@@ -186,7 +210,7 @@ $idcliente = $dados['id'];
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="guiasedocumentos.php">
+                        <a class="nav-link active" aria-current="page" href="guiasedocumentos.php">
                             <i class="icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" fill="currentColor" class="bi bi-people-fill" viewBox="0 0 16 16">
                                     <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H7Zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm-5.784 6A2.238 2.238 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.325 6.325 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1h4.216ZM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z" />
@@ -195,7 +219,7 @@ $idcliente = $dados['id'];
                             <span class="item-name">Guias e documentos</span>
 
                         </a>
-                    </li>
+                    </li> 
                     <li class="nav-item">
                         <a class="nav-link " aria-current="page" href="honorarios.php">
                             <i class="icon">
@@ -204,17 +228,6 @@ $idcliente = $dados['id'];
                                 </svg>
                             </i>
                             <span class="item-name">Honorarios</span>
-
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link " aria-current="page" href="documentos_clientes.php">
-                            <i class="icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" fill="currentColor" class="bi bi-people-fill" viewBox="0 0 16 16">
-                                    <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H7Zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm-5.784 6A2.238 2.238 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.325 6.325 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1h4.216ZM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z" />
-                                </svg>
-                            </i>
-                            <span class="item-name">Documentos clientes</span>
 
                         </a>
                     </li>
@@ -266,6 +279,7 @@ $idcliente = $dados['id'];
                             </div>
                         </div>
                         <!--logo End-->
+
                     </a>
                     <div class="sidebar-toggle" data-toggle="sidebar" data-active="true">
                         <i class="icon d-flex">
@@ -437,54 +451,86 @@ $idcliente = $dados['id'];
                 </div>
             </nav> <!--Nav End-->
         </div>
-        <div class="content-inner container-fluid pb-0" id="page_layout">
-            <div class="d-flex justify-content-between align-items-center flex-wrap mb-4 gap-3">
-                <div class="d-flex flex-column">
-                    <h3>Painel</h3>
-                    <p class="text-primary mb-0">Dashboard Social</p>
-                </div>
-            </div>
+        <div class="container-fluid content-inner pb-0" id="page_layout">
             <div class="row">
-                <div class="col-lg-3 col-md-6">
-                    <div class="card card-block card-stretch card-height">
-                        <div class="card-body">
-                            <div class="d-flex align-items-start justify-content-between mb-2">
-                                <p class="mb-0 text-dark">Total de Clientes</p>
-                                <a class="badge rounded-pill bg-soft-primary" href="agents.php">
-                                    Ver todos
-                                </a>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="row d-flex justify-content-center">
+                            <div class="col-md-6">
+                                <?php
+                                if (isset($_SESSION['msg'])) {
+                                    echo $_SESSION['msg'];
+                                }
+                                unset($_SESSION['msg']);
+
+
+                                ?>
                             </div>
-                            <div class="mb-3">
-                                <h2 class="counter"><?php
-                                                    $contagem = "SELECT COUNT(*) AS qtd FROM clients;";
-                                                    $query_count = mysqli_query($connect, $contagem);
-                                                    while ($row = mysqli_fetch_array($query_count)) {
-                                                        echo $row['qtd'];
-                                                    }
-                                                    ?></h2>
-                                <small>data</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="col-md-4">
+                                <h3>Documentos dos clientes</h3>
                             </div>
-                            <div>
-                                <div>imagem aqui</div>
-                            </div>
+
+                        </div>
+                        <div class="card-body ">
+                            <form action="doc_cli_detalhes.php" method="post">
+                                <div class="row">
+                                    
+                                    <div class="col-md-3">
+                                        <label class='form-label' for='LName'>Selecione o Mês</label>
+                                        <select class="form-select" name="nome_cliente" aria-label="Default select example">
+                                            <?php
+                                            $sql_cli = "SELECT*FROM clients";
+                                            $query_cli = mysqli_query($connect,$sql_cli);
+                                            while($row_cli = mysqli_fetch_array($query_cli)):
+                                            ?>
+                                            <option value="<?= $row_cli['name'] ?>"><?= $row_cli['name'] ?></option>
+                                            <?php endwhile; ?>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class='form-label' for='LName'>Selecione o Mês</label>
+                                        <select class="form-select" name="mes_entrega" aria-label="Default select example">
+                                            <option value="Janeiro">Janeiro</option>
+                                            <option value="Fevereiro">Fevereiro</option>
+                                            <option value="Março">Março</option>
+                                            <option value="Abril">Abril</option>
+                                            <option value="Maio">Maio</option>
+                                            <option value="Junho">Junho</option>
+                                            <option value="Julho">Julho</option>
+                                            <option value="Agosto">Agosto</option>
+                                            <option value="Setembro">Setembro</option>
+                                            <option value="Outubro">Outubro</option>
+                                            <option value="Novembro">Novembro</option>
+                                            <option value="Dezembro">Dezembro</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <button type="submit" class="btn btn-primary mt-5">Ver documentos</button>
+
+                                    </div>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
-
-
         <!-- Footer Section Start -->
         <footer class="footer">
             <div class="footer-body">
                 <ul class="left-panel list-inline mb-0 p-0">
-                    <li class="list-inline-item"><a href="">Politicas de privacidade</a></li>
-                    <li class="list-inline-item"><a href="">Termos de uso</a></li>
+                    <li class="list-inline-item"><a href="dashboard/extra/privacy-policy.html">Politicas de privacidade</a></li>
+                    <li class="list-inline-item"><a href="dashboard/extra/terms-of-service.html">Termos de uso</a></li>
                 </ul>
                 <div class="right-panel">
                     ©<script>
-                        2024
+                        2022
                     </script> <span>Todos os direitos reservados</span>, Desenvolvido
                     <span class="text-gray">
                         <svg class="icon-16" width="15" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -498,123 +544,117 @@ $idcliente = $dados['id'];
     </main>
     <!-- Wrapper End-->
 
-    <!-- Live Customizer end -->
-    <!-- Modal -->
-    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdrop" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-body">
-                    <form action="#" autocomplete="off">
-                        <h3 class="text-center">Sign In</h3>
-                        <p class="text-center">Sign in to stay connected</p>
-                        <div class="form-group">
-                            <label class="form-label">Email address</label>
-                            <input type="email" class="form-control mb-0" placeholder="Enter email" autocomplete="off">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Password</label>
-                            <input type="password" class="form-control mb-0" placeholder="Enter password" autocomplete="off">
-                        </div>
-                        <div class="d-flex justify-content-between">
-                            <div class="form-check d-inline-block mt-2 pt-1">
-                                <input type="checkbox" class="form-check-input" id="customCheck11">
-                                <label class="form-check-label" for="customCheck11">Remember Me</label>
+    <!--- modal --->
+
+    <div class='modal  fade' id='cadastroAgent' data-bs-backdrop='static' data-bs-keyboard='false' tabindex='-1' aria-labelledby='staticBackdropLabel' aria-hidden='true'>
+        <div class='modal-dialog'>
+            <div class='modal-content'>
+                <div class='modal-header bg-primary' style='border:none;'>
+                    <h5 class='modal-title text-white' id='staticBackdropLabel'>Cadastro clientes Social</h5>
+                    <button type='button' class='btn-close rounded-circle bg-danger' data-bs-dismiss='modal' aria-label='Close'></button>
+                </div>
+                <div class='modal-body'>
+                    <form action='model/add_guia.php' method='post' enctype="multipart/form-data">
+                        <div class='row '>
+                            <div class='col-lg-12'>
+                                <div class='form-group'>
+                                    <label class='form-label' for='fName'>Selecione o arquivo</label>
+                                    <input type="file" class='form-control' name="document" id="document">
+                                </div>
                             </div>
-                            <a href="#">Forget password</a>
+                            <div class='col-lg-12'>
+                                <div class='form-group'>
+                                    <label class='form-label' for='fName'>Nome do documento</label>
+                                    <input type="text" class='form-control' name="name" id="name">
+                                </div>
+                            </div>
+                            <div class='col-lg-6'>
+                                <div class='form-group'>
+                                    <label class='form-label' for='fName'>Selecione o mês</label>
+                                    <select class="form-select" name="mounth" aria-label="Default select example">
+                                        <option value="Janeiro" selected>Janeiro</option>
+                                        <option value="Fevereiro">Fevereiro</option>
+                                        <option value="Março">Março</option>
+                                        <option value="Abril">Abril</option>
+                                        <option value="Maio">Maio</option>
+                                        <option value="Junho">Junho</option>
+                                        <option value="Julho">Julho</option>
+                                        <option value="Agosto">Agosto</option>
+                                        <option value="Setembro">Setembro</option>
+                                        <option value="Outubro">Outubro</option>
+                                        <option value="Novembro">Novembro</option>
+                                        <option value="Dezembro">Dezembro</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class='col-lg-6'>
+                                <div class='form-group'>
+                                    <label class='form-label' for='fName'>Data de vencimento da guia</label>
+                                    <input type="text" class='form-control' name="date" id="date_venciment">
+                                    <script type="text/javascript">
+                                        $("#date_venciment").mask("00/00/0000");
+                                    </script>
+                                </div>
+                            </div>
+                            <div class='col-lg-6'>
+                                <div class='form-group'>
+                                    <label class='form-label' for='fName'>Tipo de documento </label>
+                                    <select class="form-select" name="type" aria-label="Default select example">
+                                        <?php
+                                        $sql_typedoc = "SELECT*FROM document_type";
+                                        $query_typedoc = mysqli_query($connect, $sql_typedoc);
+                                        while ($row_tdoc = mysqli_fetch_array($query_typedoc)):
+                                        ?>
+                                            <option value="<?= $row_tdoc['name'] ?>"><?= $row_tdoc['name'] ?></option>
+                                        <?php
+                                        endwhile;
+                                        ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class='col-lg-6'>
+                                <div class='form-group'>
+                                    <label class='form-label' for='fName'>Valor da guia</label>
+                                    <input type="text" class='form-control' name="value" id="value">
+                                </div>
+                            </div>
+                            <div class='col-lg-12'>
+                                <div class='form-group'>
+                                    <label class='form-label' for='fName'>Selecione o cliente</label>
+                                    <select class="form-select" name="client_id" aria-label="Default select example">
+                                        <?php
+                                        $sql_typedoc = "SELECT*FROM clients";
+                                        $query_typedoc = mysqli_query($connect, $sql_typedoc);
+                                        while ($row_tdoc = mysqli_fetch_array($query_typedoc)):
+                                        ?>
+                                            <option value="<?= $row_tdoc['id'] ?>"><?= $row_tdoc['name'] ?></option>
+                                        <?php
+                                        endwhile;
+                                        ?>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class='col-lg-12 justify-content-center text-center'>
+                                <div class='form-group'>
+                                    <button type='submit' class='btn btn-primary btn-lg '>Cadastrar</button>
+
+                                </div>
+                            </div>
+
                         </div>
-                        <div class="text-center pb-3">
-                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Sign in</button>
-                        </div>
-                        <p class="text-center">Or sign in with other accounts?</p>
-                        <div class="d-flex justify-content-center">
-                            <ul class="list-group list-group-horizontal list-group-flush">
-                                <li class="list-group-item border-0 pb-0">
-                                    <a href="#"><img src="assets/images/brands/fb.svg" alt="fb" loading="lazy"></a>
-                                </li>
-                                <li class="list-group-item border-0 pb-0">
-                                    <a href="#"><img src="assets/images/brands/gm.svg" alt="gm" loading="lazy"></a>
-                                </li>
-                                <li class="list-group-item border-0 pb-0">
-                                    <a href="#"><img src="assets/images/brands/im.svg" alt="im" loading="lazy"></a>
-                                </li>
-                                <li class="list-group-item border-0 pb-0">
-                                    <a href="#"><img src="assets/images/brands/li.svg" alt="li" loading="lazy"></a>
-                                </li>
-                            </ul>
-                        </div>
-                        <p class="text-center">Don't have account?<a href="#"> Click here to sign up.</a></p>
                     </form>
+                </div>
+                <div class='modal-footer' style='border:none;'>
+
+
                 </div>
             </div>
         </div>
     </div>
-    <div class="modal fade" id="staticBackdrop1" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdrop1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-body">
-                    <form action="#">
-                        <h3 class="text-center">Sign Up</h3>
-                        <p class="text-center">Create your Hope UI account</p>
-                        <div class="d-flex justify-content-between">
-                            <div class="form-group me-3">
-                                <label class="form-label">First Name</label>
-                                <input type="text" class="form-control mb-0" placeholder="Enter First Name" autocomplete="off">
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">Last Name</label>
-                                <input type="text" class="form-control mb-0" placeholder="Enter Last Name" autocomplete="off">
-                            </div>
-                        </div>
-                        <div class="d-flex justify-content-between">
-                            <div class="form-group me-3">
-                                <label class="form-label">Email</label>
-                                <input type="email" class="form-control mb-0" placeholder="Enter Email" autocomplete="off">
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">Phone No.</label>
-                                <input type="tel" class="form-control mb-0" placeholder="Enter Phone Number" autocomplete="off">
-                            </div>
-                        </div>
-                        <div class="d-flex justify-content-between">
-                            <div class="form-group me-3">
-                                <label class="form-label">Password</label>
-                                <input type="password" class="form-control mb-0" placeholder="Enter Password" autocomplete="off">
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">Confirm Password</label>
-                                <input type="password" class="form-control mb-0" placeholder="Enter Confirm Password" autocomplete="off">
-                            </div>
-                        </div>
-                        <div class="text-center pb-3">
-                            <input type="checkbox" class="form-check-input" id="customCheck112">
-                            <label class="form-check-label" for="customCheck112">I agree with the terms of use</label>
-                        </div>
-                        <div class="text-center pb-3">
-                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Sign in</button>
-                        </div>
-                        <p class="text-center">Or sign in with other accounts?</p>
-                        <div class="d-flex justify-content-center">
-                            <ul class="list-group list-group-horizontal list-group-flush">
-                                <li class="list-group-item border-0 pb-0">
-                                    <a href="#"><img src="assets/images/brands/fb.svg" alt="fb" loading="lazy"></a>
-                                </li>
-                                <li class="list-group-item border-0 pb-0">
-                                    <a href="#"><img src="assets/images/brands/gm.svg" alt="gm" loading="lazy"></a>
-                                </li>
-                                <li class="list-group-item border-0 pb-0">
-                                    <a href="#"><img src="assets/images/brands/im.svg" alt="im" loading="lazy"></a>
-                                </li>
-                                <li class="list-group-item border-0 pb-0">
-                                    <a href="#"><img src="assets/images/brands/li.svg" alt="li" loading="lazy"></a>
-                                </li>
-                            </ul>
-                        </div>
-                        <p class="text-center">Already have an Account<a href="#">Sign in</a></p>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
+
+
+    <!-- Settings sidebar end here -->
     <!-- Library Bundle Script -->
     <script src="assets/js/core/libs.min.js"></script>
     <!-- Plugin Scripts -->
@@ -637,6 +677,8 @@ $idcliente = $dados['id'];
 
 
 
+    <!-- SwiperSlider Script -->
+    <script src="assets/vendor/swiperSlider/swiper-bundle.min.js"></script>
     <!-- Lodash Utility -->
     <script src="assets/vendor/lodash/lodash.min.js"></script>
     <!-- Utilities Functions -->
@@ -656,7 +698,7 @@ $idcliente = $dados['id'];
     <script src="assets/js/hope-ui.js?v=2.2.0" defer></script>
     <script src="assets/js/hope-uipro.js?v=2.2.0" defer></script>
     <script src="assets/js/sidebar.js?v=2.2.0" defer></script>
-    <script src="file-manager/assets/js/file-manager.js"></script>
+    <script src="e-commerce/assets/js/ecommerce.js" defer></script>
 </body>
 
 </html>
