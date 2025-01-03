@@ -1,0 +1,13 @@
+[25-Apr-2024 15:04:18 America/Sao_Paulo] PHP Warning:  Undefined variable $conn in /home/aeaporg/app.aeap.org.br/admin/model/importar_excel.php on line 50
+[25-Apr-2024 15:04:18 America/Sao_Paulo] PHP Fatal error:  Uncaught Error: Call to a member function prepare() on null in /home/aeaporg/app.aeap.org.br/admin/model/importar_excel.php:50
+Stack trace:
+#0 {main}
+  thrown in /home/aeaporg/app.aeap.org.br/admin/model/importar_excel.php on line 50
+[25-Apr-2024 15:06:37 America/Sao_Paulo] PHP Warning:  Undefined variable $conn in /home/aeaporg/app.aeap.org.br/admin/model/importar_excel.php on line 50
+[25-Apr-2024 15:06:37 America/Sao_Paulo] PHP Fatal error:  Uncaught Error: Call to a member function prepare() on null in /home/aeaporg/app.aeap.org.br/admin/model/importar_excel.php:50
+Stack trace:
+#0 {main}
+  thrown in /home/aeaporg/app.aeap.org.br/admin/model/importar_excel.php on line 50
+[29-May-2024 18:29:24 UTC] PHP Warning:  Undefined variable $name in /home/aeaporg/app.aeap.org.br/admin/model/updated_agent_img.php on line 29
+[29-May-2024 18:34:10 UTC] PHP Warning:  Undefined variable $name in /home/aeaporg/app.aeap.org.br/admin/model/updated_agent_img.php on line 29
+[09-Sep-2024 14:51:49 America/Sao_Paulo] PHP Warning:  Undefined variable $specialty in /home/aeaporg/app.aeap.org.br/admin/model/add_agent.php on line 31
